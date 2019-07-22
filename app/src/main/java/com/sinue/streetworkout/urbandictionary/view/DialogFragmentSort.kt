@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.fragment.app.DialogFragment
 import com.sinue.streetworkout.urbandictionary.R
@@ -25,7 +26,7 @@ class DialogFragmentSort: DialogFragment() {
         val btnDialogYes = view.findViewById<Button>(R.id.btnAccept)
         btnDialogYes.setOnClickListener {
             val dialogListener = activity as DialogListener?
-            dialogListener!!.onSelectDoneDialog(getSelectedRadio(radioGrp), this.tag.toString())
+            dialogListener!!.onSelectDoneDialog(getSelectedRadio(radioGrp, view), this.tag.toString())
             dismiss()
         }
         val btnDialogNo = view.findViewById<Button>(R.id.btnCancel)
@@ -36,11 +37,14 @@ class DialogFragmentSort: DialogFragment() {
         }
     }
 
-    private fun getSelectedRadio(radioGrp: RadioGroup): String {
+    private fun getSelectedRadio(radioGrp: RadioGroup, v: View): String {
+
+        val rb_thumbsUp = v.findViewById<RadioButton>(R.id.radioButton_thumbsUp)
+        val rb_thumbsDown = v.findViewById<RadioButton>(R.id.radioButton_thumbsDown)
 
         when (radioGrp.checkedRadioButtonId) {
-            R.id.radioButton_thumbsUp -> return "thumbsUp"
-            R.id.radioButton_thumbsDown -> return "thumbsDown"
+            rb_thumbsUp.id -> return "thumbsUp"
+            rb_thumbsDown.id -> return "thumbsDown"
             else -> return "none"
         }
 
