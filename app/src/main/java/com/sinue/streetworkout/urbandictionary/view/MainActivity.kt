@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.sinue.streetworkout.urbandictionary.R
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModelImpl
@@ -16,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
+
+    var idlingRes = CountingIdlingResource("DATA_LOADER")
 
     private var mainViewModel: MainViewModelImpl? = null
     private var searchResultsAdapter: SearchResultsAdapter? = null
@@ -26,7 +29,11 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModelImpl::class.java)
 
+        initializeListeners()
 
+    }
+
+    private fun initializeListeners(){
         searchTxt.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
@@ -34,6 +41,7 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
 
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 if (p0 != null && p0.isNotEmpty()){
+                    idlingRes.increment()
                     searchWord(p0)
                     showProgressDialog(R.id.constraintLayout_main)
 
@@ -47,24 +55,22 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
         imageButton_sort.setOnClickListener{
             showDialogFragment(1)
         }
-
-
-    }
-
-    override fun showProgressDialog(idContainer: Int) {
-        super.showProgressDialog(idContainer)
-    }
-
-    override fun dismissProgressDialog() {
-        super.dismissProgressDialog()
     }
 
     fun searchWord(term: String) {
 
         mainViewModel!!.searchTerm(this, term)
 
+        mainViewModel!!.waitingForResponse.observe(this, Observer {
+            dismissProgressDialog()
+            idlingRes.decrement()
+
+        })
+
         mainViewModel!!.searchItemsResults.observe(this, Observer {
             prepareRecyclerView(it)
+            dismissProgressDialog()
+            idlingRes.decrement()
 
         })
 
@@ -83,7 +89,7 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
 
         }
 
-        recViewSearch.apply {
+        recView_search.apply {
             layoutManager = viewManager
             itemAnimator = DefaultItemAnimator()
             adapter = searchResultsAdapter

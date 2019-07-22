@@ -50,13 +50,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintTop_toBottomOf="@+id/txtWelcome2"
-            app:layout_constraintBottom_toTopOf="@+id/recViewSearch"
+            app:layout_constraintBottom_toTopOf="@+id/recView_search"
             android:background="@drawable/ic_thumbs_up_down_impact"
             android:enabled="false"
             android:clickable="false"/>
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recViewSearch"
+            android:id="@+id/recView_search"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/searchTxt"

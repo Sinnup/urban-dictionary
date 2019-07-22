@@ -1,13 +1,12 @@
 package com.sinue.streetworkout.urbandictionary.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 import com.sinue.streetworkout.urbandictionary.utils.UtilsCache
 
-class MainViewModelImpl: MainViewModel, ViewModel() {
+class MainViewModelImpl : MainViewModel, ViewModel() {
 
     val itemSearchRepository = UrbanDictionaryRepository()
     var searchItemsResults: MutableLiveData<List<ItemSearch>> = MutableLiveData<List<ItemSearch>>()
@@ -40,20 +39,20 @@ class MainViewModelImpl: MainViewModel, ViewModel() {
         if (order) {
             when (fieldToSort) {
                 "thumbsUp" -> {
-                    searchItemsResults.value = auxList.sortedWith( compareBy{ it.thumbs_up } )
+                    searchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_up })
                 }
                 else -> {
-                    searchItemsResults.value = auxList.sortedWith( compareBy{ it.thumbs_down } )
+                    searchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_down })
                 }
             }
 
         } else {
             when (fieldToSort) {
                 "thumbsUp" -> {
-                    searchItemsResults.value = auxList.sortedWith( compareByDescending{ it.thumbs_up } )
+                    searchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_up })
                 }
                 else -> {
-                    searchItemsResults.value = auxList.sortedWith( compareByDescending{ it.thumbs_down } )
+                    searchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_down })
                 }
             }
         }
