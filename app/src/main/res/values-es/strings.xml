@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Diccionario Urbano</string>
+
+    <string name="welcome_text">¡Bienvenido al Diccionario Urbano de Nike, el diccionario escrito por ti!</string>
+    <string name="start_search">Puedes comenzar buscando el significado de una palabra usada diariamente en inglés.</string>
+    <string name="query_hint">¿Por qué no inentas con : \"Area 51\"?</string>
+    <string name="search_source">Todos los resultados son extraidos de https://www.urbandictionary.com/</string>
+    <string name="thumbs_up">Más votos</string>
+    <string name="thumbs_down">Menos votos</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="accept">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+
+</resources>

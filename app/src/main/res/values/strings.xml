@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Urban Dictionary</string>
+
+    <string name="welcome_text">Welcome to the Urban Dictionary of Nike, the dictionary written by you!</string>
+    <string name="start_search">You can start by searching the meaning of a daily used word.</string>
+    <string name="query_hint">Why don\'t you try with \"Area 51\"?</string>
+    <string name="search_source">All results are extracted from https://www.urbandictionary.com/</string>
+    <string name="thumbs_up">Thumbs up</string>
+    <string name="thumbs_down">Thumbs down</string>
+    <string name="sort_by">Sort by</string>
+    <string name="accept">Accept</string>
+    <string name="cancel">Cancel</string>
+
+
+</resources>
