@@ -1,7 +1,9 @@
 package com.sinue.streetworkout.urbandictionary
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModel
+import androidx.test.core.app.ApplicationProvider
+
 import com.sinue.streetworkout.urbandictionary.viewmodel.UrbanDictionaryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
@@ -12,10 +14,8 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
-import java.util.Observer
 import org.junit.rules.TestRule
 import org.junit.Rule
-
 
 
 /**
@@ -48,18 +48,18 @@ class ViewModelUnitTest {
     fun callToPI_isCorrect() {
 
         val itemSearchRepository = UrbanDictionaryRepository()
-        val searchList = itemSearchRepository.getMutableLiveData(term)
+        val searchList = itemSearchRepository.getMutableLiveData(null, term)
         Thread.sleep(5000)
         searchList.value
         assertTrue(searchList.value!!.size > 0)
     }
 
-    /*Tests for class MainViewModel*/
+    /*Tests for class MainViewModelImpl*/
 
     /*
     @Test
     fun search_with_results() {
-        val mainViewModel = MainViewModel()
+        val mainViewModel = MainViewModelImpl()
         mainViewModel.sortResults("thumbs_up", true)
         mainViewModel.searchItemsResults.value
         mainViewModel.sortResults("thumbs_up", false)
@@ -73,7 +73,7 @@ class ViewModelUnitTest {
 
     @Test
     fun results_are_sorted() {
-        val mainViewModel = MainViewModel()
+        val mainViewModel = MainViewModelImpl()
         assertNotNull(mainViewModel.searchItemsResults)
         assertTrue(mainViewModel.searchItemsResults.value!!.isNotEmpty())
         assertTrue(mainViewModel.searchItemsResults.value!!.size > 0)

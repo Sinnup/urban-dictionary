@@ -1,7 +1,6 @@
 package com.sinue.streetworkout.urbandictionary.view
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -10,31 +9,31 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.idling.CountingIdlingResource
 import com.sinue.streetworkout.urbandictionary.R
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
-import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModel
+import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModelImpl
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
+class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
 
-    var mainViewModel: MainViewModel? = null
-    var searchResultsAdapter: SearchResultsAdapter? = null
+    var idlingRes = CountingIdlingResource("DATA_LOADER")
+
+    private var mainViewModel: MainViewModelImpl? = null
+    private var searchResultsAdapter: SearchResultsAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModelImpl::class.java)
 
+        initializeListeners()
 
-        //setObservers()
-        //Setting observers for demo purpose
-        mainViewModel!!.searchItemsResults.observe(this, Observer {
-            prepareRecyclerView(it)
+    }
 
-        })
-
+    private fun initializeListeners(){
         searchTxt.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
@@ -42,10 +41,13 @@ class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
 
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 if (p0 != null && p0.isNotEmpty()){
+                    idlingRes.increment()
                     searchWord(p0)
+                    showProgressDialog(R.id.constraintLayout_main)
+
                 }
 
-                return false
+                return true
             }
         })
 
@@ -53,24 +55,26 @@ class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
         imageButton_sort.setOnClickListener{
             showDialogFragment(1)
         }
-
-
-    }
-
-
-    fun setObservers(){
-        mainViewModel!!.searchItemsResults.observe(this, Observer {
-            prepareRecyclerView(it)
-
-        })
     }
 
     fun searchWord(term: String) {
 
-        mainViewModel!!.searchTerm(term)
+        mainViewModel!!.searchTerm(this, term)
+
+        mainViewModel!!.waitingForResponse.observe(this, Observer {
+            dismissProgressDialog()
+            idlingRes.decrement()
+
+        })
+
+        mainViewModel!!.searchItemsResults.observe(this, Observer {
+            prepareRecyclerView(it)
+            dismissProgressDialog()
+            idlingRes.decrement()
+
+        })
 
     }
-
 
     private fun prepareRecyclerView(listItemSearch: List<ItemSearch>){
 
@@ -85,7 +89,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
 
         }
 
-        recViewSearch.apply {
+        recView_search.apply {
             layoutManager = viewManager
             itemAnimator = DefaultItemAnimator()
             adapter = searchResultsAdapter
@@ -93,7 +97,7 @@ class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
 
         imageButton_sort.isEnabled = true
         imageButton_sort.isClickable = true
-
+        dismissProgressDialog()
 
     }
 
@@ -106,7 +110,10 @@ class MainActivity : AppCompatActivity(), DialogFragmentSort.DialogListener {
     override fun onSelectDoneDialog(sortBy: String, inputTag: String) {
 
         //The observer will be in charge of updating the RecyclerView
-        mainViewModel!!.sortResults(sortBy, true)
+        mainViewModel!!.sortResults(sortBy, false)
+        mainViewModel!!.searchItemsResults.observe(this, Observer {
+            prepareRecyclerView(it)
+        })
     }
 
     override fun onCancelDialog(cancelDialog: Unit) {
