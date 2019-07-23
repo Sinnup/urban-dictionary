@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sinue.streetworkout.urbandictionary.R
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
-import kotlinx.android.synthetic.main.search_item_view.view.*
 
 class SearchResultsAdapter(val listItemSearch: List<ItemSearch>): RecyclerView.Adapter<SearchResultsAdapter.ViewHolder>() {
 
@@ -23,7 +22,7 @@ class SearchResultsAdapter(val listItemSearch: List<ItemSearch>): RecyclerView.A
 
         return ViewHolder(
             LayoutInflater.from(mContext).inflate(
-                R.layout.search_item_view,
+                R.layout.view_item_search,
                 parent,
                 false
             )
@@ -45,7 +44,7 @@ class SearchResultsAdapter(val listItemSearch: List<ItemSearch>): RecyclerView.A
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         val thumbsUp: TextView = itemView.findViewById(R.id.txtThumbUp)
-        val thumbsDown: TextView = itemView.txtThumbDown
+        val thumbsDown: TextView = itemView.findViewById(R.id.txtThumbDown)
         val description: TextView = itemView.findViewById(R.id.txtDescription)
 
     }

@@ -1,6 +1,7 @@
 package com.sinue.streetworkout.urbandictionary.viewmodel
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
@@ -8,19 +9,32 @@ import com.sinue.streetworkout.urbandictionary.utils.UtilsCache
 
 class MainViewModelImpl : MainViewModel, ViewModel() {
 
-    val itemSearchRepository = UrbanDictionaryRepository()
-    var searchItemsResults: MutableLiveData<List<ItemSearch>> = MutableLiveData<List<ItemSearch>>()
-    var waitingForResponse: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    private val itemSearchRepository = UrbanDictionaryRepository()
+
+    private var mutableSearchItemsResults: MutableLiveData<List<ItemSearch>> = MutableLiveData()
+    var searchItemsResults: LiveData<List<ItemSearch>> = MutableLiveData()
+    var requesting: LiveData<Boolean> = MutableLiveData()
+    var waitingForResponse: MutableLiveData<Boolean> = MutableLiveData()
+
+    init {
+        waitingForResponse.postValue(false)
+
+    }
 
     override fun searchTerm(context: Context, term: String) {
 
-        waitingForResponse.value = true
+        itemSearchRepository.requesting.observeForever {
+            requesting = itemSearchRepository.requesting
+        }
+
         val cache = UtilsCache.getCache(term)
+        waitingForResponse.value = false
         if (cache != null) {
-            searchItemsResults.value = cache
-            waitingForResponse.value = false
+            mutableSearchItemsResults.value = cache
+            searchItemsResults = mutableSearchItemsResults
+
         } else {
-            searchItemsResults = itemSearchRepository.getMutableLiveData(context, term)
+            searchItemsResults = itemSearchRepository.getSearchResults(context, term)
             waitingForResponse.value = false
         }
 
@@ -39,23 +53,25 @@ class MainViewModelImpl : MainViewModel, ViewModel() {
         if (order) {
             when (fieldToSort) {
                 "thumbsUp" -> {
-                    searchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_up })
+                    mutableSearchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_up })
                 }
                 else -> {
-                    searchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_down })
+                    mutableSearchItemsResults.value = auxList.sortedWith(compareBy { it.thumbs_down })
                 }
             }
 
         } else {
             when (fieldToSort) {
                 "thumbsUp" -> {
-                    searchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_up })
+                    mutableSearchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_up })
                 }
                 else -> {
-                    searchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_down })
+                    mutableSearchItemsResults.value = auxList.sortedWith(compareByDescending { it.thumbs_down })
                 }
             }
         }
+
+        searchItemsResults = mutableSearchItemsResults
 
     }
 

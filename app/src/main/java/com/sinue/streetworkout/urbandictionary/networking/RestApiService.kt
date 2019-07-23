@@ -86,21 +86,5 @@ interface RestApiService {
                 .create(RestApiService::class.java)
         }
 
-        fun createCorService() : RestApiService {
-
-            val okHttpClient = OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .writeTimeout(15, TimeUnit.SECONDS)
-                .build()
-
-            return Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL_URBAN_DIC)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .client(okHttpClient)
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                .build()
-                .create(RestApiService::class.java)
-        }
     }
 }
