@@ -1,9 +1,5 @@
 package com.sinue.streetworkout.urbandictionary
 
-import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-
 import com.sinue.streetworkout.urbandictionary.viewmodel.UrbanDictionaryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
@@ -41,18 +37,17 @@ class ViewModelUnitTest {
     }
 
     /*Tests for class UrbanDictionaryRepository*/
-
+/*
     @Rule
     @JvmField var rule: TestRule = InstantTaskExecutorRule()
     @Test
     fun callToPI_isCorrect() {
 
         val itemSearchRepository = UrbanDictionaryRepository()
-        val searchList = itemSearchRepository.getMutableLiveData(null, term)
+        val searchList = itemSearchRepository.getSearchResults(null, term)
         Thread.sleep(5000)
-        searchList.value
-        assertTrue(searchList.value!!.size > 0)
-    }
+        assertTrue(searchList.isNotEmpty())
+    }*/
 
     /*Tests for class MainViewModelImpl*/
 
