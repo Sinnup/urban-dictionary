@@ -1,9 +1,9 @@
 package com.sinue.streetworkout.urbandictionary.viewmodel
 
 import android.util.Log
+import com.sinue.streetworkout.urbandictionary.networking.Result
 import retrofit2.Response
 import java.io.IOException
-import com.sinue.streetworkout.urbandictionary.networking.Result
 
 open class BaseRepository{
 

@@ -1,6 +1,5 @@
 package com.sinue.streetworkout.urbandictionary.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 

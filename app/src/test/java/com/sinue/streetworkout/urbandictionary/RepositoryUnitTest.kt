@@ -1,15 +1,16 @@
 package com.sinue.streetworkout.urbandictionary
 
 //import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
+
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 import com.sinue.streetworkout.urbandictionary.networking.RestApiService
 import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModelImpl
 import com.sinue.streetworkout.urbandictionary.viewmodel.UrbanDictionaryRepository2
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertThat
-
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -29,13 +30,9 @@ class RepositoryUnitTest {
     private val WORD_SEARCH = "Nike"
     private val coroutineScope = CoroutineScope( Dispatchers.Main+SupervisorJob())
     private val repository = UrbanDictionaryRepository2(RestApiService.createCorService())
-    //inline fun <reified T> lambdaMock(): T = mock(T::class.java)
     private val fakeList: MutableList<ItemSearch> = MutableList(10) {
             index -> ItemSearch("",6*index, 2*index)
     }
-    private val fakeLiveData = MutableLiveData<ItemSearch>()
-
-
     /*Tests for class UrbanDictionaryRepository*/
 
     @Test
@@ -75,29 +72,5 @@ class RepositoryUnitTest {
 
     }
 
-    /*Tests for class MainViewModelImpl*/
-
-    /*
-    @Test
-    fun search_with_results() {
-        val mainViewModel = MainViewModelImpl()
-        mainViewModel.sortResults("thumbs_up", true)
-        mainViewModel.searchItemsResults.value
-        mainViewModel.sortResults("thumbs_up", false)
-        mainViewModel.searchItemsResults.value
-
-
-        mainViewModel.sortResults("thumbs_down", true)
-        mainViewModel.sortResults("thumbs_down", false)
-
-    }
-
-    @Test
-    fun results_are_sorted() {
-        val mainViewModel = MainViewModelImpl()
-        assertNotNull(mainViewModel.searchItemsResults)
-        assertTrue(mainViewModel.searchItemsResults.value!!.isNotEmpty())
-        assertTrue(mainViewModel.searchItemsResults.value!!.size > 0)
-    }*/
 
 }
