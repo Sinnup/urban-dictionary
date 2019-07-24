@@ -1,24 +1,30 @@
 package com.sinue.streetworkout.urbandictionary
 
-import android.widget.SearchView
+import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.Espresso.onData
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
-
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 import com.sinue.streetworkout.urbandictionary.view.MainActivity
 import junit.framework.Assert
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.Description
+import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
 import org.junit.FixMethodOrder
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import org.hamcrest.CoreMatchers.*
 
 
 /**
@@ -45,27 +51,16 @@ class InstrumentedTest {
 
     @Test
     fun canTypeEditTextSearch(){
-        onView(withId(R.id.searchTxt))
+        onView(withId(R.id.editTxt_search))
             .perform(click())
-        onView(withId(R.id.searchTxt))
+        onView(withId(R.id.editTxt_search))
             .perform(doubleClick())
 
-        onView(withId(R.id.searchTxt))
+        onView(withId(R.id.editTxt_search))
             .perform(typeText(INPUT_STRING))
 
-        onView(withId(R.id.searchTxt))
+        onView(withId(R.id.editTxt_search))
             .check(matches(withText(INPUT_STRING)))
-    }
-
-    //Won't pass, cannot perform click or focus to type text
-    @Test
-    fun canTypeInSearchView(){
-
-        val matchers = allOf(isDisplayed())
-
-        allOf(matchers, anyOf(supportsInputMethods(), isAssignableFrom(SearchView::class.java)))
-
-
     }
 
     //Won't pass, cannot perform click or focus to type text
@@ -73,20 +68,33 @@ class InstrumentedTest {
     fun notEmptyResults(){
 
         val recView: RecyclerView = mainActivityRule.activity.findViewById(R.id.recView_search)
+        onView(withId(R.id.editTxt_search)).perform(click())
+        onView(withId(R.id.editTxt_search)).perform(typeText(INPUT_STRING))
+        onView(withId(R.id.editTxt_search)).perform(pressImeActionButton())
 
-
-        registerIdlingResources(mainActivityRule.activity.idlingRes)
-        onView(withId(R.id.searchTxt)).perform(click())
-        onView(withId(R.id.searchTxt)).perform(typeText(INPUT_STRING))
-        onView(withId(R.id.searchTxt)).perform(pressImeActionButton())
-
+        Thread.sleep(15000)
         onData(allOf(instanceOf(ItemSearch::class.java)))
-        //onData(allOf(instanceOf(ItemSearch::class.java)))
-        //val itemCount = recView.adapter!!.itemCount
-
-        //assert(itemCount > 0)
+        val itemCount = recView.adapter!!.itemCount
+        assert(itemCount > 0)
 
     }
 
+    /*Copied from the Instrumented test file created by Espresso Recorder
+    * */
+    private fun childAtPosition(parentMatcher: Matcher<View>, position: Int): Matcher<View> {
+
+        return object : TypeSafeMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText("Child at position $position in parent ")
+                parentMatcher.describeTo(description)
+            }
+
+            public override fun matchesSafely(view: View): Boolean {
+                val parent = view.parent
+                return parent is ViewGroup && parentMatcher.matches(parent)
+                        && view == parent.getChildAt(position)
+            }
+        }
+    }
 
 }

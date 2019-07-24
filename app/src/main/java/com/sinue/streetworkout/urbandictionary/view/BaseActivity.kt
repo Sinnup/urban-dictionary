@@ -18,9 +18,7 @@ open class BaseActivity: AppCompatActivity() {
 
         val viewGroup = findViewById<ViewGroup>(idContainer)
 
-        if (viewGroup != null) {
-            viewGroup.addView(frameProgressBar)
-        }
+        if (viewGroup != null) viewGroup.addView(frameProgressBar)
 
     }
 

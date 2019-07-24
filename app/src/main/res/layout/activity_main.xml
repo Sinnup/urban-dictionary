@@ -16,35 +16,18 @@
             android:layout_height="match_parent"
             tools:context=".view.MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:padding="5dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat">
-
-            <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-            </androidx.appcompat.widget.SearchView>
-        </androidx.appcompat.widget.Toolbar>
-
         <TextView
                 android:id="@+id/txtWelcome1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/welcome_text"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="8dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"/>
+                android:layout_marginEnd="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <TextView
                 android:id="@+id/txtWelcome2"
@@ -88,17 +71,14 @@
 
         </EditText>
 
-        <Button
+        <ImageButton
                 android:id="@+id/imageButton_sort"
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/ic_thumbs_up_down_impact"
-                android:enabled="false"
-                android:clickable="false"
-                app:layout_constraintTop_toTopOf="@+id/editTxt_search"
-                app:layout_constraintBottom_toBottomOf="@+id/editTxt_search"/>
+                android:src="@drawable/ic_thumbs_up_down_impact"
+                android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/txt_searchedWord"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recView_search"
