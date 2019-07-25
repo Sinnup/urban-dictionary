@@ -3,6 +3,7 @@ package com.sinue.streetworkout.urbandictionary.view
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.annotation.VisibleForTesting
@@ -56,7 +57,7 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
     private fun setObservers(){
         mainViewModel.searchItemsResults.observe(this, Observer {
             prepareRecyclerView(it)
-
+            imageButton_sort.visibility = View.VISIBLE
         })
 
         mainViewModel.processing.observe(this, Observer {
@@ -113,6 +114,8 @@ class MainActivity : BaseActivity(), DialogFragmentSort.DialogListener {
             itemAnimator = DefaultItemAnimator()
             adapter = searchResultsAdapter
         }
+
+
 
     }
 

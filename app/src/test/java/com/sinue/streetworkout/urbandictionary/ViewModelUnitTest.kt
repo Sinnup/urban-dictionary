@@ -1,9 +1,11 @@
 package com.sinue.streetworkout.urbandictionary
 
+import com.sinue.streetworkout.urbandictionary.viewmodel.MainViewModelImpl
 import com.sinue.streetworkout.urbandictionary.viewmodel.UrbanDictionaryRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Test
@@ -23,7 +25,7 @@ class ViewModelUnitTest {
 
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
 
-    val term = "Nike"
+    val WORD_SEARCH = "Nike"
 
     @Before
     fun setUp() {
@@ -34,6 +36,21 @@ class ViewModelUnitTest {
     fun tearDown() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
         mainThreadSurrogate.close()
+    }
+
+    @Test
+    fun whenTestCalled_thenObserving() {
+        val viewModel = MainViewModelImpl()
+        viewModel.searchTerm(WORD_SEARCH)
+        Thread.sleep(15000)
+        viewModel.sortResults("thumbsUp", false)
+
+        assert(viewModel.searchItemsResults.value!![0].thumbs_up
+            .compareTo(viewModel.searchItemsResults.value!![1].thumbs_up) > 0
+        )
+
+
+
     }
 
     /*Tests for class UrbanDictionaryRepository*/
