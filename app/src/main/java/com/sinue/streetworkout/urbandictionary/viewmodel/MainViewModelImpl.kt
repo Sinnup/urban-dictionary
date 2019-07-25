@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.sinue.streetworkout.urbandictionary.model.ItemSearch
 import com.sinue.streetworkout.urbandictionary.networking.RestApiService
 import com.sinue.streetworkout.urbandictionary.utils.UtilsCache
+import com.sinue.streetworkout.urbandictionary.utils.UtilsNetwork
 import kotlinx.coroutines.*
 
 class MainViewModelImpl : MainViewModel, ViewModel() {
@@ -15,7 +16,7 @@ class MainViewModelImpl : MainViewModel, ViewModel() {
     var searchItemsResults: LiveData<List<ItemSearch>> = itemSearchRepository.liveDataResults
     var processing: LiveData<Boolean> = MutableLiveData()
     private val viewModelJob = SupervisorJob()
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
     override fun searchTerm(term: String) {
         //Make sure you always update the value but not the observer object itself by assigning to another object,
@@ -29,11 +30,11 @@ class MainViewModelImpl : MainViewModel, ViewModel() {
         } else {
 
             coroutineScope.launch {
+
                 (processing as MutableLiveData).postValue(true)
-                withContext(Dispatchers.IO){
-                    val vl = repository.getResults(term)
-                    (searchItemsResults as MutableLiveData).postValue(vl)
-                }
+                val vl = repository.getResults(term)
+                UtilsCache.addToCache(term, vl)
+                (searchItemsResults as MutableLiveData).postValue(vl)
                 (processing as MutableLiveData).postValue(false)
             }
 

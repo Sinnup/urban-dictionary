@@ -38,14 +38,11 @@ class RepositoryUnitTest {
     @Test
     fun callToPI_isCorrect() {
 
-        coroutinesTestRule.testDispatcher.runBlockingTest {
-            coroutineScope.launch {
-                val searchList = repository.getResults(WORD_SEARCH)
-                searchList.forEach { System.out.println(it.thumbs_up) }
-                assertTrue(searchList.isNotEmpty())
-                assertTrue(searchList.size == 10)
-            }
-
+        coroutineScope.launch {
+            val searchList = repository.getResults(WORD_SEARCH)
+            searchList.forEach { System.out.println(it.thumbs_up) }
+            assertTrue(searchList.isNotEmpty())
+            assertTrue(searchList.size == 10)
         }
 
         //In order to give time to retrieve data, it's a workaround, the runBlockingTest doesn't work as expected
@@ -53,7 +50,7 @@ class RepositoryUnitTest {
 
     }
 
-
+/*
     @Test
     fun whenTestCalled_thenObserving() {
 
@@ -71,6 +68,6 @@ class RepositoryUnitTest {
         Thread.sleep(5000)
 
     }
-
+*/
 
 }

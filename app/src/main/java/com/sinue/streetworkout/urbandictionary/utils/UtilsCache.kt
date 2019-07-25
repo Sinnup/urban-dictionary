@@ -13,7 +13,8 @@ class UtilsCache {
         }
 
         fun addToCache(key: String, listItems: List<ItemSearch>) {
-            mapCache.put(key, listItems)
+            //This logic warantees we're not storing empty values which are not important and generate more space
+            if (listItems.isNotEmpty()) mapCache.put(key, listItems)
 
         }
     }
