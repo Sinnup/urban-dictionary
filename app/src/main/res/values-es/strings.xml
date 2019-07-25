@@ -3,6 +3,7 @@
 
     <string name="welcome_text">¡Bienvenido al Diccionario Urbano de Nike, el diccionario escrito por ti!</string>
     <string name="start_search">Puedes comenzar buscando el significado de una palabra usada diariamente en inglés.</string>
+    <string name="searched_word">Tu has buscado: </string>
     <string name="query_hint">¿Por qué no inentas con : \"Area 51\"?</string>
     <string name="search_source">Todos los resultados son extraidos de https://www.urbandictionary.com/</string>
     <string name="thumbs_up">Más votos</string>
