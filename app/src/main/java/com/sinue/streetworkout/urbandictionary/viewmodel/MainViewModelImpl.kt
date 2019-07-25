@@ -16,7 +16,7 @@ class MainViewModelImpl : MainViewModel, ViewModel() {
     var searchItemsResults: LiveData<List<ItemSearch>> = itemSearchRepository.liveDataResults
     var processing: LiveData<Boolean> = MutableLiveData()
     private val viewModelJob = SupervisorJob()
-    private val coroutineScope = CoroutineScope(Dispatchers.IO + viewModelJob)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     override fun searchTerm(term: String) {
         //Make sure you always update the value but not the observer object itself by assigning to another object,
@@ -49,7 +49,7 @@ class MainViewModelImpl : MainViewModel, ViewModel() {
     override fun sortResults(fieldToSort: String, order: Boolean): LiveData<List<ItemSearch>> {
 
         coroutineScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.Default){
                 val auxList: MutableList<ItemSearch> = ArrayList(searchItemsResults.value!!)
 
                 if (order) {

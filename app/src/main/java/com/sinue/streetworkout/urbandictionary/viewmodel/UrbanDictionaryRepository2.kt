@@ -6,6 +6,7 @@ import com.sinue.streetworkout.urbandictionary.networking.RestApiService
 
 class UrbanDictionaryRepository2(private val api: RestApiService): BaseRepository() {
 
+
     suspend fun getResults(term: String) : List<ItemSearch> {
 
         val searchResponse = safeApiCall(
