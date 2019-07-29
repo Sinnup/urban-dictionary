@@ -29,7 +29,7 @@ class ViewModelUnitTest {
 
 
 
-    @Test
+    //@Test
     fun callToPI_isCorrect() {
 
         coroutineScope.launch {
